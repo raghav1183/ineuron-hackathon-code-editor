@@ -63,7 +63,7 @@ websocket.on("request", (request) => {
                 const command={
                     "cpp":`clang++ ${file_name} && ./a.out`,
                     "c":`clang ${file_name} && ./a.out`,
-                    "java":`javac ${file_name} && java ${filename}`
+                    "java":`javac ${file_name} && java ${file_name}`
                 }
 
     
