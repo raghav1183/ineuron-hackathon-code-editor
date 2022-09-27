@@ -11,31 +11,29 @@
     <title>Code Editor</title>
 </head>
 <body>
-        <input type="text" name="" id="">
-        
-        <div class="language_options">
-            <!-- <button>C</button>
-            <button>C++</button>
-            <button>JAVA</button> -->
-
-            <select name="" id="">
-                <option>C</option>
-                <option>C++</option>
-                <option>JAVA</option>
-            </select>
-        </div>
-
-        <div class="login">
-            <h1>Hello Raghav</h1>
-        </div>
+        <navbar>
+           
+                <input type="text" name="" id="file_name" style="height: 1em;">
+               
+            
+            
+            <div class="language_options">
+                
+                <select name="" id="language">
+                    <option value="c">C</option>
+                    <option value="cpp">C++</option>
+                    <option value="java">JAVA</option>
+                </select>
+            </div>
+            
+        </navbar>
         <textarea id="editor" name="" id="" cols="30" rows="10">I write c++</textarea>
 
-        <div class="cpanel">
-            <button>RUN</button>
-            
+       
+        <div id="terminal">
+            <h1>TERMINAL</h1>
+        <p id="terminal-out"></p>
         </div>
-
-        <p id="terminal">TERMINAL</p>
     
 </body>
 </html>

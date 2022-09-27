@@ -2,7 +2,9 @@ var fs = require("fs");
 const { exec } = require("child_process");
 
 
+
 const http = require("http");
+const { randomInt } = require("crypto");
 const httpserver = http.createServer((req, res) => {
     console.log("We got a request");
 });
@@ -22,24 +24,24 @@ const websocket = new WebSocketServer({
 websocket.on("request", (request) => {
     connection = request.accept(null, request.origin);//null=any protocol, request.origin=origin of the request(any origin)
     //how do we get the file name at this point? can we
-    con_arr.push({"connection":connection, "file_name": "abcd.cpp"});//add databaseologics
+    con_arr.push(connection);//add databaseologics
 
     con_arr.forEach(con => {
 
-        con["connection"].on("open",()=>{
+        con.on("open",()=>{
             console.log("Connection open");
             
     })
 
-    con["connection"].on("close", (message) => {
+    con.on("close", (message) => {
             console.log("Connection closed");
-            con_arr.splice(con_arr.indexOf(con["connection"]),1)
+            con_arr.splice(con_arr.indexOf(con),1)
     })
             
 
     
     
-        con["connection"].on("message", (message) => {
+        con.on("message", (message) => {
             console.log("Got a message");
             console.log(message);
 
@@ -48,16 +50,32 @@ websocket.on("request", (request) => {
             //create file with unique name
             //compile
             //run and call back.
+
+            let packet = JSON.parse(message["utf8Data"])
+
+            // packet.file_name="abcd"
+
+            file_name=packet["file_name"]+"."+packet["extension"];
+            let code = packet["code"]
+            console.log(typeof(code));
+            fs.writeFile( file_name ,code, ()=>{
             
-            
-            fs.writeFile(con["file_name"],message["utf8Data"], ()=>{
-            
-                exec("gcc abcd.cpp && ./a.out",
+                const command={
+                    "cpp":`clang++ ${file_name} && ./a.out`,
+                    "c":`clang ${file_name} && ./a.out`,
+                    "java":`javac ${file_name} && java ${filename}`
+                }
+
+    
+                exec(command[packet["extension"]],
                 (error, stdout, stderr)=>{
                 console.log(`stdout: ${stdout}`);
                 console.log(`stderr: ${stderr}`);
 
-                con["connection"].send(`{"stderr":"${stderr}","stdout":"${stdout}"}`);
+                let streamsout= {}
+                streamsout.stderr=stderr;
+                streamsout.stdout=stdout;
+                con.send(JSON.stringify(streamsout));
                 }
                 )})
                     });
